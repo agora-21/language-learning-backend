@@ -1,0 +1,22 @@
+{
+  "name": "language-learning-backend",
+  "version": "1.0.0",
+  "description": "Backend for parallel text and audio language learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agora-21/language-learning-backend.git"
+  },
+  "keywords": [
+    "language"
+  ],
+  "author": "Gustavo Iha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agora-21/language-learning-backend/issues"
+  },
+  "homepage": "https://github.com/agora-21/language-learning-backend#readme"
+}
