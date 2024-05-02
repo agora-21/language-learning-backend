@@ -1,12 +1,12 @@
 import express from 'express'
 
+import initializeRoutes from './routes'
+
 const app = express()
 const PORT = process.env.SERVER_PORT
 
-app.get('/status', (request, response) => {
-  response.end()
-})
+initializeRoutes(app)
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`)
+  console.log(`language-learning-backend app listening on port ${PORT}.`)
 })
