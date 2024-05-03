@@ -1,12 +1,24 @@
-import express from 'express'
+import Fastify, { FastifyInstance } from 'fastify'
 
-import initializeRoutes from './routes'
+import routes from './routes'
 
-const app = express()
-const PORT = process.env.SERVER_PORT
-
-initializeRoutes(app)
-
-app.listen(PORT, () => {
-  console.log(`language-learning-backend app listening on port ${PORT}.`)
+const app : FastifyInstance = Fastify({
+  logger: true
 })
+
+app.register(routes)
+
+const startServer = async () => {
+  try {
+    const port = process.env.SERVER_PORT ? parseInt(process.env.SERVER_PORT) : 3000
+
+    await app.listen({ port })
+
+    app.log.info(`Server listening on ${app.server.address()}`)
+  } catch (error) {
+    app.log.error(error)
+    process.exit(1)
+  }
+}
+
+startServer()

@@ -1,4 +1,5 @@
-import { Request, Response } from 'express'
+import { FastifyRequest, FastifyReply } from 'fastify'
+
 import createUserService from './actions/create-user'
 import authenticateUserService from './actions/authenticate-user'
 
@@ -7,18 +8,18 @@ interface UserRequest {
   password: string
 }
 
-export const createUser = async (request: Request, response: Response) => {
+export const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
   const { email, password } = request.body as UserRequest
   await createUserService(email, password)
 
-  response.status(201)
+  reply.code(201).send()
 }
 
-export const authenticateUser = async (request: Request, response: Response) => {
+export const authenticateUser = async (request: FastifyRequest, reply: FastifyReply) => {
   const { email, password } = request.body as UserRequest
   const authenticationToken = await authenticateUserService(email, password)
 
-  if (authenticationToken) return response.status(200).json({ authenticationToken })
+  if (authenticationToken) return reply.send({ authenticationToken })
 
-  response.status(401)
+  reply.code(401).send()
 }

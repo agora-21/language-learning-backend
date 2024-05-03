@@ -1,14 +1,12 @@
-import { Application } from 'express'
+import { FastifyInstance } from 'fastify'
 
 import { createUser, authenticateUser } from './users/controller'
 
-const initializeRoutes = (app: Application) => {
-  app.get('/status', (request, response) => {
-    response.end()
-  })
+const routes = async (app: FastifyInstance) => {
+  app.get('/status', (_, reply) => reply.send())
 
   app.post('/users', createUser)
   app.get('/users/authenticate', authenticateUser)
 }
 
-export default initializeRoutes
+export default routes
