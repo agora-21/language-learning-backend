@@ -1,14 +1,14 @@
 import { Application } from 'express'
 
-import { indexUsers, showUser } from './users/controller'
+import { createUser, authenticateUser } from './users/controller'
 
 const initializeRoutes = (app: Application) => {
   app.get('/status', (request, response) => {
     response.end()
   })
 
-  app.get('/users', indexUsers)
-  app.get('/user/:id', showUser)
+  app.post('/users', createUser)
+  app.get('/users/authenticate', authenticateUser)
 }
 
 export default initializeRoutes
