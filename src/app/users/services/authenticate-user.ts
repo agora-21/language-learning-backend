@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import { promisify } from 'util'
 import jwt from 'jsonwebtoken'
 
-import prisma from '../../prisma'
+import prisma from '../../../prisma'
 
 const verifyPassword = async (storedPassword: string, enteredPassword: string): Promise<boolean> => {
   const [hashedPassword, salt] = storedPassword.split('.')

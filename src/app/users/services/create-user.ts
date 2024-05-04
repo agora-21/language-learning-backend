@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { promisify } from 'util'
 
-import prisma from '../../prisma'
+import prisma from '../../../prisma'
 
 const hashPassword = async (password: string): Promise<string> => {
   const salt = crypto.randomBytes(8).toString('hex')

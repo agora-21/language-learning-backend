@@ -1,12 +1,8 @@
-import Fastify, { FastifyInstance } from 'fastify'
+import build from './app'
 
-import userRoutes from './users/routes'
-
-const app : FastifyInstance = Fastify({
+const app = build({
   logger: true
 })
-
-app.register(userRoutes)
 
 const startServer = async () => {
   try {
