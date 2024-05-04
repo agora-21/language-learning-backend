@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
-import { createUser, authenticateUser } from './users/controller'
+import { createUser, authenticateUser } from '../users/controller'
 
 const routes = async (app: FastifyInstance) => {
   app.get('/status', (_, reply) => reply.send())

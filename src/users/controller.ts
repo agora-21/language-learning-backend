@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import createUserService from './actions/create-user'
-import authenticateUserService from './actions/authenticate-user'
+import createUserService from './services/create-user'
+import authenticateUserService from './services/authenticate-user'
 
 interface UserRequest {
   email: string,

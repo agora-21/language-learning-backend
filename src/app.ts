@@ -1,12 +1,12 @@
 import Fastify, { FastifyInstance } from 'fastify'
 
-import routes from './routes'
+import userRoutes from './users/routes'
 
 const app : FastifyInstance = Fastify({
   logger: true
 })
 
-app.register(routes)
+app.register(userRoutes)
 
 const startServer = async () => {
   try {
