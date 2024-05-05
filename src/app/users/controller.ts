@@ -16,7 +16,7 @@ export const createUser = async (request: FastifyRequest, reply: FastifyReply) =
 }
 
 export const authenticateUser = async (request: FastifyRequest, reply: FastifyReply) => {
-  const { email, password } = request.body as UserRequest
+  const { email, password } = request.query as UserRequest
   const authenticationToken = await authenticateUserService(email, password)
 
   if (authenticationToken) return reply.send({ authenticationToken })

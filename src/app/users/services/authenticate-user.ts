@@ -18,11 +18,10 @@ export default async (email: string, password: string) => {
   })
 
   if (!user) return false
-
   const passwordVerified = verifyPassword(user.hashedPassword, password)
   if (!passwordVerified) return false
 
   return jwt.sign({ userId: user.id }, 'your-secret-key', {
-    expiresIn: '7d',
+    expiresIn: '7d'
   })
 }
