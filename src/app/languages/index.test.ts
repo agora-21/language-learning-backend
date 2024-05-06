@@ -49,4 +49,47 @@ describe('languages routes', () => {
       }]))
     })
   })
+
+  describe('POST /', () => {
+    test('it creates a language', async () => {
+      const app = buildApp()
+
+      const response = await app.inject({
+        method: 'POST',
+        url: '/',
+        payload: {
+          name: 'English'
+        }
+      })
+
+      const language = await prisma.language.findUnique({
+        where: {
+          name: 'English'
+        }
+      })
+
+      expect(response.statusCode).toEqual(201)
+      expect(response.body).toEqual(JSON.stringify({
+        id: 1,
+        name: 'English'
+      }))
+      expect(language).toBeTruthy()
+    })
+
+    describe('when name is blank', () => {
+      test('it replies with 400', async () => {
+        const app = buildApp()
+
+        const response = await app.inject({
+          method: 'POST',
+          url: '/',
+          payload: {
+            name: ''
+          }
+        })
+
+        expect(response.statusCode).toEqual(400)
+      })
+    })
+  })
 })

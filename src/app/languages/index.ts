@@ -1,23 +1,13 @@
 import { FastifyInstance } from 'fastify'
 
-import { getAllLanguages } from './controller'
-
-const getAllLanguagesOptions = {
-  schema: {
-    response: {
-      200: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            name: { type: 'string' }
-          }
-        }
-      }
-    }
-  }
-}
+import {
+  getAllLanguages,
+  getAllLanguagesOptions,
+  createLanguage,
+  createLanguageOptions
+} from './controller'
 
 export default async (app: FastifyInstance) => {
   app.get('/', getAllLanguagesOptions, getAllLanguages)
+  app.post('/', createLanguageOptions, createLanguage)
 }
