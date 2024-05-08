@@ -7,16 +7,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Difficulty {
+  A_1
+  A_2
+  B_1
+  B_2
+  C_1
+  C_2
+}
+
 model User {
-  id             Int       @id @default(autoincrement())
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  email          String    @unique
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  email          String   @unique
   hashedPassword String
   name           String?
 }
 
 model Language {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  lessonParagraphs LessonParagraph[]
+}
+
+model Lesson {
+  id          Int      @id @default(autoincrement())
+  number      Int
+  name        String
+  description String
+  difficulty  Difficulty
+  lessonParagraphs LessonParagraph[]
+}
+
+model LessonParagraph {
+  id         Int      @id @default(autoincrement())
+  content    String
+  number     Int
+  language   Language @relation(fields: [languageId], references: [id])
+  languageId Int
+  lesson     Lesson   @relation(fields: [lessonId], references: [id])
+  lessonId   Int
+  @@unique([number, languageId, lessonId])
 }
