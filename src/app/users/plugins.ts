@@ -1,8 +1,10 @@
 import { FastifyInstance } from 'fastify'
+import fastifyPlugin from 'fastify-plugin'
 import jwt from 'jsonwebtoken'
-import prisma from './prisma'
+import prisma from '../../prisma'
 
-export const verifyAuthentication = async (app: FastifyInstance) => {
+
+export const verifyAuthentication = fastifyPlugin(async (app: FastifyInstance) => {
   app.addHook('onRequest', async (request, reply) => {
     const token = request.headers.authorization?.replace('Bearer ', '')
     if (!token) return reply.code(401).send()
@@ -21,4 +23,4 @@ export const verifyAuthentication = async (app: FastifyInstance) => {
 
     reply.code(401).send()
   })
-}
+})
