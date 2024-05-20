@@ -24,7 +24,6 @@ CREATE TABLE "Language" (
 -- CreateTable
 CREATE TABLE "Lesson" (
     "id" SERIAL NOT NULL,
-    "number" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "difficulty" "Difficulty" NOT NULL,
@@ -67,7 +66,7 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "Language_name_key" ON "Language"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Lesson_number_difficulty_key" ON "Lesson"("number", "difficulty");
+CREATE UNIQUE INDEX "Lesson_name_key" ON "Lesson"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "LessonContent_position_lessonId_key" ON "LessonContent"("position", "lessonId");

@@ -1,95 +1,111 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 import { resetDatabase } from '../../tests-config'
-import Fastify from 'fastify'
+import Fastify, { FastifyInstance } from 'fastify'
 import lessonApp from '.'
 import prisma from '../../prisma'
 
+let app : FastifyInstance
+
 const buildApp = () => {
-  const app = Fastify()
+  app = Fastify()
   app.register(lessonApp)
   return app
 }
 
-describe.skip('lessons routes', () => {
-  beforeEach(resetDatabase)
-  afterEach(resetDatabase)
+describe('lessons routes', () => {
+  beforeEach(() => {
+    buildApp()
+  })
+
+  afterEach(async () => {
+    await resetDatabase()
+    app.close()
+  })
 
   describe('GET /', () => {
-    test('it returns all lessons', async () => {
-      const app = buildApp()
-
+    test('it returns lessons of difficulty A_1', async () => {
       await prisma.lesson.create({
         data: {
-          name: 'English'
+          name: 'Casual conversation',
+          description: 'Jane and Bert have a conversation during a friends party.',
+          difficulty: 'A_1'
         }
       })
       await prisma.lesson.create({
         data: {
-          name: 'Italian'
+          name: 'Formal conversation',
+          description: 'Jane and Bert have a conversation during a UN meeting.',
+          difficulty: 'A_1'
         }
       })
       await prisma.lesson.create({
         data: {
-          name: 'Dutch'
+          name: 'Veterinary appointment',
+          description: 'Bens dog Vader gets sick and taken to vet. The veterinarian explains their situation.',
+          difficulty: 'B_1'
         }
       })
 
       const response = await app.inject({
         method: 'GET',
-        url: '/'
+        url: '/',
+        query: {
+          difficulty: 'A_1'
+        }
       })
 
       expect(response.statusCode).toEqual(200)
       expect(response.body).toEqual(JSON.stringify([{
-        name: 'English'
+        id: 1,
+        name: 'Casual conversation',
+        description: 'Jane and Bert have a conversation during a friends party.',
+        difficulty: 'A_1'
       }, {
-        name: 'Italian'
-      }, {
-        name: 'Dutch'
+        id: 2,
+        name: 'Formal conversation',
+        description: 'Jane and Bert have a conversation during a UN meeting.',
+        difficulty: 'A_1'
       }]))
     })
-  })
 
-  describe('POST /', () => {
-    test('it creates a lesson', async () => {
-      const app = buildApp()
+    test('it returns lessons of difficulty B_1', async () => {
+      await prisma.lesson.create({
+        data: {
+          name: 'Casual conversation',
+          description: 'Jane and Bert have a conversation during a friends party.',
+          difficulty: 'A_1'
+        }
+      })
+      await prisma.lesson.create({
+        data: {
+          name: 'Formal conversation',
+          description: 'Jane and Bert have a conversation during a UN meeting.',
+          difficulty: 'A_1'
+        }
+      })
+      await prisma.lesson.create({
+        data: {
+          name: 'Veterinary appointment',
+          description: 'Bens dog Vader gets sick and taken to vet. The veterinarian explains their situation.',
+          difficulty: 'B_1'
+        }
+      })
 
       const response = await app.inject({
-        method: 'POST',
+        method: 'GET',
         url: '/',
-        payload: {
-          name: 'English'
+        query: {
+          difficulty: 'B_1'
         }
       })
 
-      const lesson = await prisma.lesson.findUnique({
-        where: {
-          name: 'English'
-        }
-      })
-
-      expect(response.statusCode).toEqual(201)
-      expect(response.body).toEqual(JSON.stringify({
-        id: 1,
-        name: 'English'
-      }))
-      expect(lesson).toBeTruthy()
-    })
-
-    describe('when name is blank', () => {
-      test('it replies with 400', async () => {
-        const app = buildApp()
-
-        const response = await app.inject({
-          method: 'POST',
-          url: '/',
-          payload: {
-            name: ''
-          }
-        })
-
-        expect(response.statusCode).toEqual(400)
-      })
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toEqual(JSON.stringify([{
+        id: 3,
+        name: 'Veterinary appointment',
+        description: 'Bens dog Vader gets sick and taken to vet. The veterinarian explains their situation.',
+        difficulty: 'B_1'
+      }]))
     })
   })
 })

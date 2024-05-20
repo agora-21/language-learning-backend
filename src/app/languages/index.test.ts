@@ -1,23 +1,29 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 import { resetDatabase } from '../../tests-config'
-import Fastify from 'fastify'
+import Fastify, { FastifyInstance } from 'fastify'
 import languageApp from '.'
 import prisma from '../../prisma'
 
+let app : FastifyInstance
+
 const buildApp = () => {
-  const app = Fastify()
+  app = Fastify()
   app.register(languageApp)
   return app
 }
 
 describe('languages routes', () => {
-  beforeEach(resetDatabase)
-  afterEach(resetDatabase)
+  beforeEach(() => {
+    buildApp()
+  })
+
+  afterEach(async () => {
+    await resetDatabase()
+    app.close()
+  })
 
   describe('GET /', () => {
     test('it returns all languages', async () => {
-      const app = buildApp()
-
       await prisma.language.create({
         data: {
           name: 'English'
@@ -52,8 +58,6 @@ describe('languages routes', () => {
 
   describe('POST /', () => {
     test('it creates a language', async () => {
-      const app = buildApp()
-
       const response = await app.inject({
         method: 'POST',
         url: '/',
@@ -78,8 +82,6 @@ describe('languages routes', () => {
 
     describe('when name is blank', () => {
       test('it replies with 400', async () => {
-        const app = buildApp()
-
         const response = await app.inject({
           method: 'POST',
           url: '/',

@@ -3,11 +3,10 @@ import { FastifyInstance } from 'fastify'
 import {
   getAllLessons,
   getAllLessonsOptions,
-  createLesson,
-  createLessonOptions
+  createLesson
 } from './controller'
 
 export default async (app: FastifyInstance) => {
   app.get('/', getAllLessonsOptions, getAllLessons)
-  app.post('/', createLessonOptions, createLesson)
+  app.post('/', createLesson)
 }

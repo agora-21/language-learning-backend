@@ -1,26 +1,32 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 import { resetDatabase } from '../../tests-config'
-import Fastify from 'fastify'
+import Fastify, { FastifyInstance } from 'fastify'
 import userApp from '.'
 import prisma from '../../prisma'
 import crypto from 'crypto'
 import { promisify } from 'util'
 import jwt from 'jsonwebtoken'
 
+let app : FastifyInstance
+
 const buildApp = () => {
-  const app = Fastify()
+  app = Fastify()
   app.register(userApp)
   return app
 }
 
 describe('users routes', () => {
-  beforeEach(resetDatabase)
-  afterEach(resetDatabase)
+  beforeEach(() => {
+    buildApp()
+  })
+
+  afterEach(async () => {
+    await resetDatabase()
+    app.close()
+  })
 
   describe('POST /', () => {
     test('it creates a user', async () => {
-      const app = buildApp()
-
       const response = await app.inject({
         method: 'POST',
         url: '/',
@@ -49,8 +55,6 @@ describe('users routes', () => {
 
   describe('GET /authenticate', () => {
     test('it returns a jwt token', async () => {
-      const app = buildApp()
-
       const salt = crypto.randomBytes(8).toString('hex')
       const hash = await promisify(crypto.scrypt)('abc123', salt, 64) as Buffer
       const hashedPassword = `${hash.toString('hex')}.${salt}`

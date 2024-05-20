@@ -34,13 +34,11 @@ model Language {
 
 model Lesson {
   id                   Int      @id @default(autoincrement())
-  number               Int
-  name                 String
+  name                 String   @unique
   description          String
   difficulty           Difficulty
   lessonContents       LessonContent[]
   userLessonProgresses UserLessonProgress[]
-  @@unique([number, difficulty])
 }
 
 model LessonContent {
